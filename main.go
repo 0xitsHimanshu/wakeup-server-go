@@ -2,13 +2,14 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"wakeup-server-go/database"
 	"wakeup-server-go/models"
+	"wakeup-server-go/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-
 )
 
 func main(){
@@ -22,4 +23,15 @@ func main(){
 		log.Fatal("Error during database migration:", err)
 	}
 
+	if err != nil {
+		log.Fatal("Error conecting to database:", err)
+	}
+
+	r := gin.Default()
+	routes.SetupRouter(r)
+
+	PORT := os.Getenv("PORT")
+
+
+	r.Run(":" + PORT);
 }
