@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"wakeup-server-go/controllers"
 	"wakeup-server-go/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,7 @@ import (
 
 func SetupRouter(r *gin.Engine) {
 	apiGroup := r.Group("/api/v1")
-	
+
 	// Public routes (no authentication required)
 	apiGroup.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Server is healthy"})
@@ -17,6 +18,15 @@ func SetupRouter(r *gin.Engine) {
 	apiGroup.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "test response"})
 	})
+
+	// Authentication routes
+	authGroup := apiGroup.Group("/auth")
+	{
+		authGroup.POST("/signup", controllers.Signup)
+		authGroup.POST("/login", controllers.Login)
+		authGroup.POST("/refresh", controllers.RefreshToken)
+		authGroup.POST("/logout", middleware.TokenValidation, controllers.Logout)
+	}
 
 	// Protected routes (require JWT authentication)
 	protectedGroup := apiGroup.Group("/protected")
@@ -49,7 +59,7 @@ func SetupRouter(r *gin.Engine) {
 		// Another protected route example
 		protectedGroup.GET("/dashboard", func(c *gin.Context) {
 			email, _ := c.Get("email")
-			
+
 			c.JSON(http.StatusOK, gin.H{
 				"status":  "success",
 				"message": "Welcome to your dashboard",
