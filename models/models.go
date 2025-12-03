@@ -9,8 +9,6 @@ import (
 type User struct {
 	gorm.Model
 	Email        string `json:"email" binding:"required,email" gorm:"unique;not null"`
-	Password     string `json:"-" gorm:"not null"`
-	RefreshToken string `json:"-"`
 	Tasks        []Task `json:"tasks" gorm:"foreignKey:UserID"`
 }
 
