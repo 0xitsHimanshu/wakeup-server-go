@@ -26,7 +26,7 @@ type Task struct {
 type Log struct {
 	gorm.Model
 	TaskID       uint      `json:"taskId" binding:"required" `
-	Timestamp    time.Time `json:"time"`
+	Time    time.Time `json:"time"`
 	TimeTake     int64     `json:"timeTake"`
 	LogResponse  string    `json:"logResponse"`
 	IsSuccess    bool      `json:"isSuccess"`

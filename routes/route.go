@@ -13,4 +13,7 @@ func SetupRouter(r *gin.Engine) {
 	apiGroup.GET("/health", func(c *gin.Context) { // Public routes (no authentication required)
 		c.JSON(http.StatusOK, gin.H{"message": "Server is healthy"})
 	})	
+
+	pingGroup := apiGroup.Group("/ping")
+	pingRouter(pingGroup)
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"wakeup-server-go/database"
 	"wakeup-server-go/models"
 	"wakeup-server-go/routes"
+	"wakeup-server-go/worker"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -44,6 +46,8 @@ func main(){
 	routes.SetupRouter(r)
 
 	PORT := os.Getenv("PORT")
+	go worker.NotiWorker()
+	go worker.StartPingWorker(context.Background())
 
 
 	r.Run(":" + PORT);
